@@ -43,3 +43,4 @@ module.exports.loop = function ()
 
 
 // screeps is pissing me off
+// yea its a very high learning curve
