@@ -40,3 +40,6 @@ module.exports.loop = function ()
       }
    }
 }
+
+
+// screeps is pissing me off
