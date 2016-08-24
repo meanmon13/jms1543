@@ -2,8 +2,23 @@ var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
 
+var CreepFactory = require('CreepFactory');
+
+
+//creepPlan[spawn level][roleNum] = number of expected creeps for a given role
+var creepPlan =
+[
+    //# Harvesters, # Upgraders, # Builders
+    [0,0,0], //Controller Level 0
+    [2,2,0], //Controller Level 1
+    [3,3,1]  //Controller Level 2
+];
+
 module.exports.loop = function ()
 {
+   var spawn = Game.spawns['Spawn1'];
+   var room = spawn.room;
+   var factory = new CreepFactory(spawn);
 
    for(var name in Memory.creeps)
    {
@@ -15,13 +30,26 @@ module.exports.loop = function ()
    }
 
    var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-   console.log('Harvesters: ' + harvesters.length);
+   var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
+   var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
 
-   /*if(harvesters.length < 2)
+   console.log('Harvesters: ' + harvesters.length);
+   console.log('Upgraders: ' + upgraders.length);
+   console.log('Builders: ' + builders.length);
+
+
+   if(harvesters.length < creepPlan[room.controller.level][0])
    {
-      var newName = Game.spawns['Spawn1'].createCreep([WORK,CARRY,MOVE], undefined, {role: 'harvester'});
-      console.log('Spawning new harvester: ' + newName);
-   }*/
+      factory.spawnHarvester(undefined);
+   }
+   else if(upgraders.length < creepPlan[room.controller.level][1])
+   {
+      factory.spawnUpgrader(undefined);
+   }
+   else if(builders.length < creepPlan[room.controller.level][2])
+   {
+      factory.spawnBuilder(undefined);
+   }
 
    for(var name in Game.creeps)
    {
@@ -40,7 +68,3 @@ module.exports.loop = function ()
       }
    }
 }
-
-
-// screeps is pissing me off
-// yea its a very high learning curve
