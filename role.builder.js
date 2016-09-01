@@ -25,6 +25,11 @@ var roleBuilder =
                creep.moveTo(targets[0]);
             }
          }
+         else
+         {
+            return false;
+         }
+
       }
       else
       {
@@ -34,6 +39,8 @@ var roleBuilder =
             creep.moveTo(sources[0]);
          }
       }
+
+      return true;
    }
 };
 

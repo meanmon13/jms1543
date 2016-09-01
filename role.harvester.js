@@ -1,7 +1,9 @@
 var roleHarvester =
 {
 
-   /** @param {Creep} creep **/
+   /** @param {Creep} creep 
+      This function returns false if the creep has full energy but no structures require refueling; otherwise, true is returned.
+   **/
    run: function(creep)
 	{
       if(creep.carry.energy < creep.carryCapacity)
@@ -9,8 +11,10 @@ var roleHarvester =
          var sources = creep.room.find(FIND_SOURCES);
          if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE)
 			{
-            creep.moveTo(sources[0]);
+            creep.moveTo(sources[0]);            
          }
+
+         return true;
       }
       else
 		{
@@ -28,8 +32,13 @@ var roleHarvester =
 			{
             if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
 				{
-               creep.moveTo(targets[0]);
+               creep.moveTo(targets[0]);               
             }
+            return true;
+         }
+         else
+         {
+            return false;
          }
       }
    }

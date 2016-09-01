@@ -2,6 +2,7 @@
 var roleHarvester = require('role.harvester');
 var roleUpgrader = require('role.upgrader');
 var roleBuilder = require('role.builder');
+var roleIdler = require('role.idler');
 var CreepFactory = require('CreepFactory');
 
 //creepPlan[spawn level][roleNum] = number of expected creeps for a given role
@@ -37,7 +38,11 @@ CreepManager.prototype.tick = function()
       var creep = myCreeps[name];
       if(creep.memory.role == 'harvester')
       {
-         roleHarvester.run(creep);
+         if(!roleHarvester.run(creep))
+         {
+            //Perform Idle tasks if there are no harvester tasks to perform
+            roleIdler.run(creep,this.spawn);
+         }
          this.creepCounts[0]++;
       }
       else if(creep.memory.role == 'upgrader')
@@ -47,7 +52,11 @@ CreepManager.prototype.tick = function()
       }
       else if(creep.memory.role == 'builder')
       {
-         roleBuilder.run(creep);
+         if(!roleBuilder.run(creep))
+         {
+            //Perform Idle tasks if there are no construction tasks to perform
+            roleIdler.run(creep,this.spawn);
+         }
          this.creepCounts[2]++;
       }
    }
